@@ -9,3 +9,7 @@ pb_ostream_s as_pb_ostream(Print& p);
 
 //! Convert an object implementing Print into a nanopb istream
 pb_istream_s as_pb_istream(Stream& p);
+
+void init_crc();
+bool crc_good(uint16_t target_crc);
+
