@@ -7,7 +7,6 @@
 // something?
 #include <util/crc16.h>
 
-//#include "Arduino.h"
 // TODO preprocessor flags to exclude crc calc?
 
 static bool pb_print_write(pb_ostream_t *stream, const pb_byte_t *buf, size_t count) {
@@ -32,8 +31,6 @@ bool crc_good(uint16_t target_crc) {
     // [modified?] orig crc at end?)
     //return curr_crc == 0;
     
-    //Serial.print("curr_crc: ");
-    //Serial.println(curr_crc);
     return target_crc == curr_crc;
 }
 
@@ -44,17 +41,13 @@ static bool pb_stream_read(pb_istream_t *stream, pb_byte_t *buf, size_t count) {
     uint8_t byte_i;
     for (uint8_t i=0; i<written; i++) {
         byte_i = *(buf + i);
-
-        /*
-        Serial.print("i=");
-        Serial.print(i);
-        Serial.print(", byte_i=");
-        Serial.println(byte_i, HEX);
-        */
-
         curr_crc = _crc_xmodem_update(curr_crc, byte_i);
     }
 
+    // TODO maybe just have value of this boolean dictate whether init_crc
+    // will be called immediately here before return?
+    // (would have to happen excactly once per message, no matter the message
+    // type)
     return written == count;
 };
 
